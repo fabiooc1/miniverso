@@ -17,9 +17,10 @@ O sistema como um todo consiste na landing page da empresa miniverso sendo ela c
 - As publicações do blog serão publicadas imediatamente ao enviar, sem fluxo de rascunhos.
 - Cada publicação do blog deve possuir pelo menos uma categoria e pode pertencer a várias categorias. Uma categoria pode estar associada a várias publicações.
 - A autenticação utilizará Better Auth, considerando a evolução futura dos perfis de acesso e das permissões. Supabase será utilizado como provedor de PostgreSQL, não como provedor de autenticação.
-- Nesta etapa, o acesso será dividido entre visitante e administrador. O visitante acessa apenas o conteúdo público da landing page e do blog, sem precisar de autenticação e sem acesso ao painel ou às operações de alteração.
-- O administrador autenticado tem acesso completo a todas as funcionalidades administrativas previstas no escopo. Não haverá restrições entre administradores, matriz de permissões granulares ou perfis administrativos adicionais nesta etapa.
-- As rotas e operações administrativas devem verificar no servidor se a sessão pertence a um administrador; ocultar controles na interface não substitui essa verificação.
+- O acesso será dividido entre visitante, admin e superadmin. O visitante acessa apenas o conteúdo público da landing page e do blog, sem precisar de autenticação e sem acesso ao painel ou às operações de alteração.
+- Admin e superadmin têm acesso completo à gestão de conteúdo da landing page e do blog. Apenas o superadmin pode gerenciar outros usuários e seus perfis de acesso; o admin pode gerenciar somente a própria conta, sem alterar o próprio perfil de acesso.
+- O cadastro público está desabilitado. Novas contas administrativas recebem o perfil admin por padrão; superadmin é atribuído explicitamente.
+- As rotas e operações administrativas devem verificar no servidor se a sessão pertence a um admin ou superadmin. Operações de gestão de outros usuários exigem superadmin; ocultar controles na interface não substitui essas verificações.
 - O projeto tem fins acadêmicos e a prioridade é utilizar hospedagem gratuita. A Vercel continua como candidata para a aplicação; a topologia de hospedagem dos arquivos ainda precisa ser definida.
 - O armazenamento inicial de arquivos será uma pasta `uploads/` no servidor ou no projeto, acessada por um serviço de arquivos desacoplado. O objetivo é permitir substituir o armazenamento futuramente sem alterar os consumidores do serviço.
 - A decisão sobre armazenamento de arquivos em produção fica adiada para antes do deploy. Essa pendência não bloqueia o planejamento ou o desenvolvimento com o provedor local de uploads.
