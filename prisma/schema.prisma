@@ -75,6 +75,19 @@ model Verification {
   @@map("verification")
 }
 
+model Section {
+  id         Int       @id @default(autoincrement())
+  key        String    @unique
+  position   Int       @unique @default(0)
+  visible   Boolean   @default(true)
+  content   Json
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([position])
+}
+
 model PostCategory {
   id   Int    @id @default(autoincrement())
   name String
