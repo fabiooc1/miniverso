@@ -1,26 +1,211 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-sans);
+  --color-brand-night: var(--brand-night);
+  --color-brand-night-2: var(--brand-night-2);
+  --color-brand-lilac: var(--brand-lilac);
+  --color-highlight: var(--highlight);
+  --color-highlight-foreground: var(--highlight-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/*
+ * Design system Miniverso (extraído das referências em references/).
+ * Paleta da marca:
+ *   night   #090A14  fundo escuro principal
+ *   night-2 #151625  superfícies sobre o fundo escuro
+ *   violet  #6C4CFF  cor primária
+ *   lime    #C8FF3D  destaque/CTA
+ *   lilac   #F4F3FF  fundo claro
+ * O tema claro é o padrão. Seções escuras usam a classe `dark`, que troca os
+ * tokens apenas dentro delas (ex.: hero, CTA, sidebar do painel).
+ */
+:root {
+  --brand-night: #090a14;
+  --brand-night-2: #151625;
+  --brand-violet: #6c4cff;
+  --brand-lime: #c8ff3d;
+  --brand-lilac: #f4f3ff;
+
+  --background: var(--brand-lilac);
+  --foreground: var(--brand-night);
+  --card: #ffffff;
+  --card-foreground: var(--brand-night);
+  --popover: #ffffff;
+  --popover-foreground: var(--brand-night);
+  --primary: var(--brand-violet);
+  --primary-foreground: #ffffff;
+  --secondary: #ebe7ff;
+  --secondary-foreground: #4a2fd9;
+  --muted: #ecebf3;
+  --muted-foreground: #6b6880;
+  --accent: #ebe7ff;
+  --accent-foreground: var(--brand-night);
+  --highlight: var(--brand-lime);
+  --highlight-foreground: var(--brand-night);
+  --success: #e5f7ed;
+  --success-foreground: #1d7a47;
+  --warning: #fff4e0;
+  --warning-foreground: #b56a00;
+  --destructive: #d93f3f;
+  --border: #e3e2eb;
+  --input: #e3e2eb;
+  --ring: var(--brand-violet);
+  --chart-1: var(--brand-violet);
+  --chart-2: var(--brand-lime);
+  --chart-3: #a49ec5;
+  --chart-4: #4a2fd9;
+  --chart-5: var(--brand-night-2);
+  --radius: 0.75rem;
+  --sidebar: var(--brand-night);
+  --sidebar-foreground: #c9c7d6;
+  --sidebar-primary: var(--brand-violet);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--brand-night-2);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #1c1d2b;
+  --sidebar-ring: var(--brand-violet);
+}
+
+.dark {
+  --background: var(--brand-night);
+  --foreground: #ffffff;
+  --card: var(--brand-night-2);
+  --card-foreground: #ffffff;
+  --popover: var(--brand-night-2);
+  --popover-foreground: #ffffff;
+  --primary: var(--brand-violet);
+  --primary-foreground: #ffffff;
+  --secondary: var(--brand-night-2);
+  --secondary-foreground: #ffffff;
+  --muted: var(--brand-night-2);
+  --muted-foreground: #9c9ab0;
+  --accent: var(--brand-night-2);
+  --accent-foreground: #ffffff;
+  --destructive: #f07272;
+  --border: rgb(255 255 255 / 10%);
+  --input: rgb(255 255 255 / 12%);
+  --ring: var(--brand-lime);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  .dark {
+    @apply bg-background text-foreground;
+  }
+  button:not(:disabled), [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+@layer utilities {
+  /* Largura e respiro lateral padrão das seções do site. */
+  .site-container {
+    @apply mx-auto w-full max-w-[1440px] px-6 md:px-16;
+  }
+
+  /* Rótulo em caixa alta acima dos títulos ("O QUE CRIAMOS", "CONTEÚDO EDITORIAL"). */
+  .eyebrow {
+    @apply text-xs font-bold tracking-wide text-primary uppercase;
+  }
+  .dark .eyebrow {
+    @apply text-highlight;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/*
+ * Conteúdo dos posts (gerado pelo Tiptap). Usado no editor e na página do
+ * artigo. O bloco de citação é o "destaque" violeta do design.
+ */
+@layer components {
+  .rich-text {
+    @apply flex flex-col gap-4 text-base leading-relaxed text-muted-foreground;
+  }
+  .rich-text h2 {
+    @apply mt-4 text-2xl text-foreground md:text-3xl;
+  }
+  .rich-text h3 {
+    @apply mt-2 text-xl font-semibold text-foreground;
+  }
+  .rich-text strong {
+    @apply font-bold text-foreground;
+  }
+  .rich-text a {
+    @apply font-medium text-primary underline underline-offset-4;
+  }
+  .rich-text ul {
+    @apply list-disc pl-6;
+  }
+  .rich-text ol {
+    @apply list-decimal pl-6;
+  }
+  .rich-text li > p {
+    @apply my-1;
+  }
+  .rich-text blockquote {
+    @apply rounded-2xl bg-primary px-6 py-5 text-lg font-bold text-primary-foreground;
+  }
+  .rich-text blockquote strong {
+    @apply text-primary-foreground;
+  }
+  .rich-text hr {
+    @apply my-4 border-border;
+  }
+  .rich-text p.is-editor-empty:first-child::before {
+    @apply pointer-events-none float-left h-0 text-muted-foreground/60 content-[attr(data-placeholder)];
+  }
 }
