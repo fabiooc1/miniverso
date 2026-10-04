@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
 import { admin } from "better-auth/plugins";
+import { nextCookies } from "better-auth/next-js";
 import { authRoles } from "./auth-permissions";
 
 export const auth = betterAuth({
@@ -18,5 +19,7 @@ export const auth = betterAuth({
       adminRoles: ["superadmin"],
       roles: authRoles,
     }),
+    // Deve ser o último plugin: grava os cookies de sessão em Server Actions.
+    nextCookies(),
   ],
 });
