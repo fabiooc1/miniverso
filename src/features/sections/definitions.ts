@@ -84,4 +84,9 @@ export type SectionEntry<K extends SectionKey = SectionKey> = {
   key: K;
   visible: boolean;
   content: SectionContentMap[K];
+  /**
+   * O conteúdo salvo não passou no schema e foi trocado pelos valores padrão
+   * (ex.: migração de dados pendente). Salvar sobrescreveria o conteúdo real.
+   */
+  invalidContent?: boolean;
 };
