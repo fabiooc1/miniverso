@@ -47,7 +47,9 @@ export function RichTextEditor({ id, value, onChange, invalid }: RichTextEditorP
         role: "textbox",
       },
     },
-    onUpdate: ({ editor }) => onChange(editor.getJSON() as RichTextNode),
+    // O ProseMirror cria `attrs` com `Object.create(null)`, que não chega íntegro
+    // numa Server Action; o JSON.parse devolve objetos comuns.
+    onUpdate: ({ editor }) => onChange(JSON.parse(JSON.stringify(editor.getJSON())) as RichTextNode),
   });
 
   return (
