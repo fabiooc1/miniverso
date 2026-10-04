@@ -3,7 +3,7 @@
 import { requireAdmin } from "@/features/auth/session";
 import { actionError, type ActionResult } from "@/lib/action-result";
 import { getStorage } from "@/lib/storage";
-import { validateImageFile } from "@/lib/storage/images";
+import { verifyImageFile } from "@/lib/storage/image-validation";
 import { isValidFileKey } from "@/lib/storage/keys";
 import { findReferencedFileKeys } from "./references";
 
@@ -11,14 +11,14 @@ export async function uploadImage(formData: FormData): Promise<ActionResult<{ ke
   await requireAdmin();
 
   const file = formData.get("file");
-  if (!(file instanceof File) || file.size === 0) {
+  if (!(file instanceof File)) {
     return actionError("Selecione uma imagem.");
   }
 
-  const error = validateImageFile(file);
-  if (error) return actionError(error);
+  const verification = await verifyImageFile(file);
+  if (!verification.ok) return actionError(verification.message);
 
-  const { key } = await getStorage().save(file);
+  const { key } = await getStorage().save(verification.image);
   return { ok: true, data: { key } };
 }
 

@@ -1,7 +1,7 @@
 import { StorageClient } from "@supabase/storage-js";
 import { IMAGE_EXTENSIONS, IMAGE_MAX_BYTES } from "./images";
 import { createFileKey, isValidFileKey } from "./keys";
-import type { FileStorage, StoredFile } from "./types";
+import type { FileStorage, FileUpload, StoredFile } from "./types";
 
 type SupabaseStorageConfig = {
   /** URL do projeto: `https://<projeto>.supabase.co`. */
@@ -33,16 +33,16 @@ export class SupabaseFileStorage implements FileStorage {
     return this.client.from(this.config.bucket);
   }
 
-  async save(file: File) {
-    const extension = IMAGE_EXTENSIONS[file.type];
+  async save(file: FileUpload) {
+    const extension = IMAGE_EXTENSIONS[file.contentType];
     if (!extension) {
-      throw new Error(`Tipo de arquivo não suportado: ${file.type}`);
+      throw new Error(`Tipo de arquivo não suportado: ${file.contentType}`);
     }
 
     const key = createFileKey(extension);
     // Binário direto (em vez de multipart): tipo e cache vão nos headers.
-    const { error } = await this.bucket.upload(key, await file.arrayBuffer(), {
-      contentType: file.type,
+    const { error } = await this.bucket.upload(key, file.bytes, {
+      contentType: file.contentType,
       // As chaves são únicas (uuid), então o conteúdo nunca muda.
       cacheControl: "31536000",
       upsert: false,
