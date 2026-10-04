@@ -2,7 +2,7 @@
 
 import { requireAdmin } from "@/features/auth/session";
 import { actionError, type ActionResult } from "@/lib/action-result";
-import { storage } from "@/lib/storage";
+import { getStorage } from "@/lib/storage";
 import { validateImageFile } from "@/lib/storage/images";
 import { isValidFileKey } from "@/lib/storage/keys";
 import { findReferencedFileKeys } from "./references";
@@ -18,7 +18,7 @@ export async function uploadImage(formData: FormData): Promise<ActionResult<{ ke
   const error = validateImageFile(file);
   if (error) return actionError(error);
 
-  const { key } = await storage.save(file);
+  const { key } = await getStorage().save(file);
   return { ok: true, data: { key } };
 }
 
@@ -34,6 +34,6 @@ export async function discardUploads(keys: string[]) {
 
   const referenced = await findReferencedFileKeys(candidates);
   await Promise.all(
-    candidates.filter((key) => !referenced.has(key)).map((key) => storage.delete(key)),
+    candidates.filter((key) => !referenced.has(key)).map((key) => getStorage().delete(key)),
   );
 }
