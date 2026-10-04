@@ -47,6 +47,15 @@ As imagens passam pela interface `FileStorage` (`src/lib/storage`). O provedor �
 - A `SUPABASE_SERVICE_ROLE_KEY` é secreta e usada só no servidor.
 - Trocar de provedor: implemente `FileStorage`, registre-o em `src/lib/storage/index.ts` e copie os arquivos mantendo as mesmas chaves. O banco não precisa de migração, porque guarda só as chaves.
 
+## Vídeos
+
+Vídeos nunca passam pelo serviço de arquivos: são sempre links do **YouTube** ou do **Vimeo** (evita estourar espaço e tráfego do armazenamento).
+
+- Aceitos no hero, em "Onde atuamos", nos cards de Projetos e como bloco nos posts do blog.
+- O link colado é validado no servidor (`features/video/actions.ts`), que busca título e miniatura no oEmbed do provedor. Guardamos provedor e id, nunca a URL nem um iframe; o endereço do player é montado pelo código, só para domínios conhecidos.
+- No site, o vídeo aparece como miniatura com botão de play; o player (YouTube no modo sem cookies) só carrega ao clicar.
+- Para aceitar outro provedor: estenda `parseVideoUrl`, `getVideoEmbedUrl` e `VIDEO_THUMBNAIL_HOSTS` em `features/video/video.ts`.
+
 ## Estrutura
 
 ```
@@ -62,6 +71,7 @@ src/
     users/                gestão de colaboradores (somente superadmin)
     account/              "Minha conta": perfil, senha e sessões
     uploads/              upload de imagens e limpeza de arquivos órfãos
+    video/                vídeos externos (YouTube/Vimeo): validação, oEmbed e player
   lib/                    prisma, auth, storage, utilitários
 ```
 
