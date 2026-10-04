@@ -2,7 +2,7 @@ import "server-only";
 
 import { collectImageKeys } from "@/features/sections/lib/image-keys";
 import { prisma } from "@/lib/prisma";
-import { storage } from "@/lib/storage";
+import { getStorage } from "@/lib/storage";
 
 /** Dentre `keys`, retorna as que ainda são usadas pela landing ou pelo blog. */
 export async function findReferencedFileKeys(keys: string[]) {
@@ -29,6 +29,6 @@ export async function deleteUnreferencedFiles(keys: Iterable<string>) {
 
   const referenced = await findReferencedFileKeys(unique);
   await Promise.all(
-    unique.filter((key) => !referenced.has(key)).map((key) => storage.delete(key)),
+    unique.filter((key) => !referenced.has(key)).map((key) => getStorage().delete(key)),
   );
 }
