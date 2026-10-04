@@ -20,6 +20,7 @@
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "@supabase/storage-js": "^2.117.2",
+    "@tiptap/core": "3.31.4",
     "@tiptap/extension-placeholder": "^3.31.4",
     "@tiptap/pm": "^3.31.4",
     "@tiptap/react": "^3.31.4",

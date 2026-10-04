@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { VIDEO_THUMBNAIL_HOSTS } from "./src/features/video/video";
 
 type RemotePattern = NonNullable<NonNullable<NextConfig["images"]>["remotePatterns"]>[number];
 
@@ -41,7 +42,11 @@ const nextConfig: NextConfig = {
   },
   images: {
     localPatterns: [{ pathname: "/uploads/**", search: "" }],
-    remotePatterns: filesRemotePattern(),
+    remotePatterns: [
+      ...filesRemotePattern(),
+      // Miniaturas dos vídeos (YouTube/Vimeo), obtidas pelo oEmbed.
+      ...VIDEO_THUMBNAIL_HOSTS.map((hostname) => ({ protocol: "https" as const, hostname, pathname: "/**" })),
+    ],
   },
   experimental: {
     serverActions: {
