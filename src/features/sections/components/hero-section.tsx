@@ -1,6 +1,6 @@
 import { ArrowUpRightIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { EditableImage } from "../editable/editable-image";
+import { EditableMedia } from "../editable/editable-media";
 import { EditableLink } from "../editable/editable-link";
 import { EditableText } from "../editable/editable-text";
 import type { HeroContent } from "../schemas/hero";
@@ -36,19 +36,22 @@ export function HeroSection({ content }: { content: HeroContent }) {
         </div>
 
         <figure className="relative aspect-square overflow-hidden rounded-3xl border">
-          <EditableImage
-            path="image"
-            value={content.image}
+          <EditableMedia
+            path="media"
+            value={content.media}
             sizes="(min-width: 1024px) 50vw, 100vw"
             priority
           />
-          <EditableText
-            path="imageCaption"
-            value={content.imageCaption}
-            as="figcaption"
-            className="absolute bottom-5 left-5 text-xs text-white/80"
-            placeholder="Legenda"
-          />
+          {/* Só com imagem: sobre um vídeo, a legenda cobriria os controles do player. */}
+          {content.media.type === "image" && (
+            <EditableText
+              path="mediaCaption"
+              value={content.mediaCaption}
+              as="figcaption"
+              className="pointer-events-none absolute bottom-5 left-5 text-xs text-white/80"
+              placeholder="Legenda"
+            />
+          )}
         </figure>
       </div>
     </section>

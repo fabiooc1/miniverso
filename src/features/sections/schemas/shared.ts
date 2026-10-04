@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { videoSchema } from "@/features/video/video";
 
 /** Texto simples obrigatório, sem formatação. `max` deve caber no design. */
 export function requiredText(max: number) {
@@ -43,5 +44,14 @@ export const imageSchema = z
 
 export const emptyImage = { key: "", alt: "" };
 
+/** Imagem enviada ao serviço de arquivos ou vídeo externo (YouTube/Vimeo). */
+export const mediaSchema = z.discriminatedUnion("type", [
+  z.object({ type: z.literal("image"), image: imageSchema }),
+  z.object({ type: z.literal("video"), video: videoSchema }),
+]);
+
+export const emptyMedia: MediaContent = { type: "image", image: emptyImage };
+
 export type LinkContent = z.infer<typeof linkSchema>;
 export type ImageContent = z.infer<typeof imageSchema>;
+export type MediaContent = z.infer<typeof mediaSchema>;

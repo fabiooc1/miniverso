@@ -1,5 +1,5 @@
 import { ArrowRightIcon } from "lucide-react";
-import { EditableImage } from "../editable/editable-image";
+import { EditableMedia } from "../editable/editable-media";
 import { EditableListAdd, EditableListItem } from "../editable/editable-list";
 import { EditableText } from "../editable/editable-text";
 import type { ExperienceContent } from "../schemas/experience";
@@ -10,7 +10,7 @@ export function ExperienceSection({ content }: { content: ExperienceContent }) {
     <section className="dark">
       <div className="site-container grid items-center gap-12 py-20 md:py-24 lg:grid-cols-2">
         <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
-          <EditableImage path="image" value={content.image} sizes="(min-width: 1024px) 50vw, 100vw" />
+          <EditableMedia path="media" value={content.media} sizes="(min-width: 1024px) 50vw, 100vw" />
         </div>
 
         <div className="flex flex-col gap-8">
