@@ -27,12 +27,22 @@ type EditorToolbarProps = {
   errors: Record<string, string>;
   onSave: () => void;
   onDiscard: () => void;
+  /** Impede salvar (ex.: conteúdo salvo inválido que seria sobrescrito). */
+  saveBlocked?: boolean;
   /** Painel de seções, exibido numa Sheet. */
   sectionsPanel: React.ReactNode;
 };
 
 /** Barra fixa do editor: estado, erros, pré-visualização, descartar e salvar. */
-export function EditorToolbar({ isDirty, isSaving, errors, onSave, onDiscard, sectionsPanel }: EditorToolbarProps) {
+export function EditorToolbar({
+  isDirty,
+  isSaving,
+  errors,
+  onSave,
+  onDiscard,
+  saveBlocked = false,
+  sectionsPanel,
+}: EditorToolbarProps) {
   const errorEntries = Object.entries(errors);
 
   return (
@@ -128,7 +138,7 @@ export function EditorToolbar({ isDirty, isSaving, errors, onSave, onDiscard, se
           </AlertDialogContent>
         </AlertDialog>
 
-        <Button variant="highlight" disabled={!isDirty || isSaving} onClick={onSave}>
+        <Button variant="highlight" disabled={!isDirty || isSaving || saveBlocked} onClick={onSave}>
           {isSaving && <Spinner data-icon="inline-start" />}
           {isSaving ? "Salvando…" : "Salvar alterações"}
         </Button>
