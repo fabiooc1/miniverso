@@ -22,9 +22,9 @@ function parseContent(key: SectionKey, raw: unknown) {
 
   if (!result.success) {
     console.error(`[landing] Conteúdo inválido na seção "${key}"; usando os valores padrão.`, result.error.issues);
-    return defaults;
+    return { content: defaults, invalidContent: true };
   }
-  return result.data;
+  return { content: result.data, invalidContent: false };
 }
 
 /**
@@ -42,10 +42,14 @@ async function loadSections(): Promise<SectionEntry[]> {
 
   const entries = keys.map((key) => {
     const row = rowsByKey.get(key);
+    const parsed = row
+      ? parseContent(key, row.content)
+      : { content: sectionDefinitions[key].defaults, invalidContent: false };
     return {
       key,
       visible: row?.visible ?? true,
-      content: row ? parseContent(key, row.content) : sectionDefinitions[key].defaults,
+      content: parsed.content,
+      ...(parsed.invalidContent ? { invalidContent: true } : {}),
     } as SectionEntry;
   });
 
