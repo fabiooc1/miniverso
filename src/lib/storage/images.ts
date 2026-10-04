@@ -11,6 +11,10 @@ export const IMAGE_EXTENSIONS: Record<string, string> = {
 
 export const IMAGE_ACCEPT = Object.keys(IMAGE_EXTENSIONS).join(",");
 
+/**
+ * Validação rápida no navegador, só para dar retorno imediato ao usuário.
+ * A verificação que vale é a do servidor (`verifyImageFile`), pelo conteúdo.
+ */
 export function validateImageFile(file: File): string | null {
   if (!(file.type in IMAGE_EXTENSIONS)) {
     return "Formato não suportado. Use JPG, PNG, WebP, AVIF ou GIF.";
