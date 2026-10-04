@@ -1,7 +1,7 @@
 # Conteúdo editável da landing page
 
-Status: especificação aprovada para implementação. Nada deste documento está
-implementado ainda; os nomes de arquivos e funções são a estrutura alvo.
+Status: implementado. Diferenças em relação à especificação original estão
+marcadas como "Implementação".
 
 ## Princípio
 
@@ -39,6 +39,9 @@ model Section {
 }
 ```
 
+- Implementação: a tabela também tem `id`, `visible` (ocultar seção) e
+  `position` único; a reordenação move as posições para valores negativos
+  antes de regravá-las, dentro da mesma transação.
 - Há uma linha por seção, criada pelo seed com os valores padrão. Criar ou
   excluir seções está fora do escopo.
 - Reordenar atualiza `position` de todas as seções numa `$transaction`.
@@ -199,10 +202,24 @@ src/lib/storage/          interface FileStorage + LocalFileStorage (uploads/)
 - `react-hook-form` e `@hookform/resolvers` somente se algum formulário
   auxiliar (por exemplo, o `Dialog` de imagem) precisar.
 
+## Seções implementadas
+
+Mapeadas a partir das telas em `references/`: `hero`, `brands`, `services`,
+`experience`, `process`, `projects`, `testimonial`, `contact` e `footer`
+(fixa: sempre visível e no fim). O cabeçalho do site não é editável.
+
+Notas de implementação:
+
+- Imagem com `key` vazia é "sem imagem": a seção mostra um placeholder com o
+  gradiente da marca. `alt` é obrigatório quando há imagem.
+- Listas usam `EditableListItem` + `EditableListAdd` (em vez de render props,
+  que não podem ser passadas de Server Components); limites de quantidade e de
+  caracteres são lidos do próprio schema Zod.
+- `EditableLinkArea` cria áreas clicáveis (cards de projeto) e
+  `EditableButton` permite editar o texto de botões.
+- Seções sem linha no banco aparecem com os valores padrão e são gravadas no
+  primeiro salvamento.
+
 ## Pendências
 
-- Mapear as seções do Figma e definir o schema de cada uma. O arquivo
-  `PAW - Miniverso` exige acesso autenticado (token da API do Figma, Figma MCP
-  ou exportação das telas).
-- Decidir se o admin pode ocultar seções. Se sim, adicionar
-  `visible Boolean @default(true)` em `Section`.
+- Arrastar para reordenar (hoje: botões ↑/↓ na seção e no painel "Seções").
