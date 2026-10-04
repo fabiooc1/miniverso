@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useTransition } from "react";
+import { CircleAlertIcon } from "lucide-react";
 import { toast } from "sonner";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { discardUploads } from "@/features/uploads/actions";
 import { saveLandingSections } from "../actions";
 import { SiteHeader } from "../components/site-header";
@@ -20,6 +22,12 @@ import { SectionsPanel } from "./sections-panel";
 export function LandingEditor({ initialSections }: { initialSections: SectionEntry[] }) {
   const { state, dispatch, isDirty } = useLandingEditorState(initialSections);
   const [isSaving, startSaving] = useTransition();
+
+  // Seções cujo conteúdo salvo não passou na validação e aparecem com os
+  // valores padrão: salvar agora apagaria o conteúdo real.
+  const invalidSections = initialSections
+    .filter((section) => section.invalidContent)
+    .map((section) => sectionDefinitions[section.key].label);
 
   const movableCount = state.sections.filter((section) => !("fixed" in sectionDefinitions[section.key])).length;
 
@@ -68,8 +76,21 @@ export function LandingEditor({ initialSections }: { initialSections: SectionEnt
         errors={state.errors}
         onSave={save}
         onDiscard={discard}
+        saveBlocked={invalidSections.length > 0}
         sectionsPanel={sectionsPanel}
       />
+
+      {invalidSections.length > 0 && (
+        <Alert variant="destructive" className="mx-4 mt-4 w-auto md:mx-6">
+          <CircleAlertIcon />
+          <AlertTitle>Salvamento bloqueado para proteger o conteúdo</AlertTitle>
+          <AlertDescription>
+            O conteúdo salvo de {invalidSections.join(", ")} está num formato que o site não reconhece e aparece com
+            os valores padrão. Isso costuma indicar uma migração de dados pendente (<code>pnpm db:deploy</code>).
+            Salvar agora apagaria o conteúdo real.
+          </AlertDescription>
+        </Alert>
+      )}
 
       <div className="flex flex-1 p-4 md:p-6">
         <EditorProvider
