@@ -212,6 +212,13 @@ Notas de implementação:
 
 - Imagem com `key` vazia é "sem imagem": a seção mostra um placeholder com o
   gradiente da marca. `alt` é obrigatório quando há imagem.
+- Hero, "Onde atuamos" e os cards de Projetos usam o tipo **mídia**
+  (`mediaSchema`): `{ type: "image", image: { key, alt } }` ou
+  `{ type: "video", video: { provider, videoId, hash?, title, thumbnailUrl } }`.
+  No editor, `EditableMedia` abre o diálogo "Trocar mídia" com as abas Imagem
+  (upload) e Vídeo (link). A migração `20261004200000_landing_media_fields`
+  converteu o formato antigo (`image` → `media`, `imageCaption` →
+  `mediaCaption`).
 - Listas usam `EditableListItem` + `EditableListAdd` (em vez de render props,
   que não podem ser passadas de Server Components); limites de quantidade e de
   caracteres são lidos do próprio schema Zod.
