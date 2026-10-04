@@ -33,6 +33,20 @@ As skills oficiais estão em `.agents/skills`; para atualizá-las, execute `pnpm
 2. `pnpm db:deploy` e `pnpm db:seed`.
 3. `pnpm dev` e acesse `http://localhost:3000/login`.
 
+## Armazenamento de imagens
+
+As imagens passam pela interface `FileStorage` (`src/lib/storage`). O provedor é escolhido por `STORAGE_PROVIDER`:
+
+| Provedor | Uso | Variáveis |
+| --- | --- | --- |
+| `supabase` (padrão do projeto) | Bucket público no Supabase Storage | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_STORAGE_BUCKET` |
+| `local` | Desenvolvimento, pasta `uploads/` servida em `/uploads` | `UPLOADS_DIR` (opcional) |
+
+- O `pnpm db:seed` cria o bucket público (limite de 5 MB e apenas tipos de imagem) quando o provedor é `supabase`.
+- A URL pública das imagens é derivada do provedor no `next.config.ts`; `NEXT_PUBLIC_FILES_BASE_URL` só é necessária para sobrescrevê-la (ex.: uma CDN).
+- A `SUPABASE_SERVICE_ROLE_KEY` é secreta e usada só no servidor.
+- Trocar de provedor: implemente `FileStorage`, registre-o em `src/lib/storage/index.ts` e copie os arquivos mantendo as mesmas chaves. O banco não precisa de migração, porque guarda só as chaves.
+
 ## Estrutura
 
 ```
@@ -73,4 +87,3 @@ Tipografia Inter; títulos em peso extra-bold; botões em formato pílula; rótu
 ## Pendências conhecidas
 
 - Páginas públicas do blog (`/blog`, `/blog/[slug]`) e envio do formulário de contato.
-- Armazenamento de arquivos em produção (o provedor local exige disco persistente).
