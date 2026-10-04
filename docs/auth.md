@@ -41,10 +41,25 @@ as migrations no banco escolhido com `pnpm db:deploy` e gere o cliente com
 `pnpm db:generate`.
 
 Configure `BETTER_AUTH_SECRET` e `BETTER_AUTH_URL` no ambiente antes de servir
-a autenticação. O endpoint Next.js de autenticação e a interface de login ainda
-precisam ser integrados. O primeiro superadmin deve ser provisionado por um
-procedimento local confiável, com e-mail e senha definidos pelo responsável;
-esta configuração não cria contas nem credenciais padrão.
+a autenticação. O endpoint fica em `src/app/api/auth/[...all]/route.ts` e o
+login em `/login` (Server Action com o plugin `nextCookies`).
+
+O primeiro superadmin é criado por `pnpm db:seed` a partir de
+`SUPERADMIN_NAME`, `SUPERADMIN_EMAIL` e `SUPERADMIN_PASSWORD` no `.env`. Com as
+variáveis vazias a etapa é ignorada; se o e-mail já existir, nada é alterado.
+Não há credenciais padrão.
+
+## Implementação no painel
+
+- `src/proxy.ts`: redireciona `/admin/*` para `/login` sem cookie de sessão
+  (checagem otimista).
+- `src/features/auth/session.ts`: `requireAdmin()` e `requireSuperadmin()`,
+  chamados em toda página e Server Action do painel.
+- `/admin/colaboradores` (superadmin): criar contas, alterar perfil, redefinir
+  senha, bloquear/desbloquear e excluir. Ações sobre a própria conta são
+  recusadas no servidor.
+- `/admin/conta`: nome, troca de senha (encerra as outras sessões) e sessões
+  ativas. O token das sessões nunca é enviado ao navegador.
 
 Validação das permissões: `node --test src/lib/auth-permissions.test.mjs`.
 
