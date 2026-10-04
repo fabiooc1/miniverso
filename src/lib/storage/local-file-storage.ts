@@ -1,12 +1,11 @@
 import "server-only";
 
-import { randomUUID } from "node:crypto";
 import { createReadStream } from "node:fs";
 import { mkdir, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { Readable } from "node:stream";
 import { IMAGE_EXTENSIONS } from "./images";
-import { isValidFileKey } from "./keys";
+import { createFileKey, isValidFileKey } from "./keys";
 import type { FileStorage, StoredFile } from "./types";
 
 const CONTENT_TYPES = Object.fromEntries(
@@ -26,9 +25,7 @@ export class LocalFileStorage implements FileStorage {
       throw new Error(`Tipo de arquivo não suportado: ${file.type}`);
     }
 
-    const now = new Date();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const key = `${now.getFullYear()}/${month}/${randomUUID()}.${extension}`;
+    const key = createFileKey(extension);
     const filePath = this.resolve(key);
 
     await mkdir(path.dirname(filePath), { recursive: true });

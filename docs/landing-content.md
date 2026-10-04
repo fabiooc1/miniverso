@@ -193,7 +193,7 @@ src/features/sections/
   editor/                 EditorProvider, barra de ações, controles de seção
   actions.ts              saveSections (com checagem de role)
   queries.ts              getLandingSections (cacheada)
-src/lib/storage/          interface FileStorage + LocalFileStorage (uploads/)
+src/lib/storage/          interface FileStorage + provedores Supabase e local (uploads/)
 ```
 
 ## Dependências a adicionar

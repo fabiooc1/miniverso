@@ -1,8 +1,8 @@
-import { storage } from "@/lib/storage";
+import { getStorage } from "@/lib/storage";
 
 export async function GET(_request: Request, ctx: RouteContext<"/uploads/[...key]">) {
   const { key } = await ctx.params;
-  const file = await storage.read(key.join("/"));
+  const file = await getStorage().read(key.join("/"));
 
   if (!file) {
     return new Response("Arquivo não encontrado", { status: 404 });
