@@ -1,12 +1,18 @@
+import type { NodeViewRenderer } from "@tiptap/core";
 import Placeholder from "@tiptap/extension-placeholder";
 import StarterKit from "@tiptap/starter-kit";
 import { z } from "zod";
+import { videoSchema } from "@/features/video/video";
+import { createVideoNode } from "./video-node";
 
 /**
  * Extensões do editor de posts. O mesmo conjunto deve ser usado para editar e
  * para renderizar, garantindo que só exista o que o editor sabe produzir.
  */
-export function createRichTextExtensions({ placeholder }: { placeholder?: string } = {}) {
+export function createRichTextExtensions({
+  placeholder,
+  videoNodeView,
+}: { placeholder?: string; videoNodeView?: NodeViewRenderer } = {}) {
   return [
     StarterKit.configure({
       heading: { levels: [2, 3] },
@@ -20,6 +26,7 @@ export function createRichTextExtensions({ placeholder }: { placeholder?: string
         HTMLAttributes: { rel: "noopener noreferrer nofollow", target: "_blank" },
       },
     }),
+    createVideoNode(videoNodeView),
     ...(placeholder ? [Placeholder.configure({ placeholder })] : []),
   ];
 }
@@ -35,6 +42,7 @@ const NODE_TYPES = [
   "blockquote",
   "horizontalRule",
   "hardBreak",
+  "video",
 ] as const;
 
 const MARK_TYPES = ["bold", "italic", "underline", "strike", "link"] as const;
@@ -58,14 +66,24 @@ export type RichTextNode = {
   marks?: z.infer<typeof markSchema>[];
 };
 
+/** Atributos do bloco de vídeo, sem os `null` que o Tiptap usa como padrão. */
+function isValidVideoAttrs(attrs: Record<string, unknown> | undefined) {
+  const defined = Object.fromEntries(Object.entries(attrs ?? {}).filter(([, value]) => value != null));
+  return videoSchema.safeParse(defined).success;
+}
+
 const nodeSchema: z.ZodType<RichTextNode> = z.lazy(() =>
-  z.object({
-    type: z.enum(NODE_TYPES),
-    attrs: z.record(z.string(), z.unknown()).optional(),
-    content: z.array(nodeSchema).optional(),
-    text: z.string().optional(),
-    marks: z.array(markSchema).optional(),
-  }),
+  z
+    .object({
+      type: z.enum(NODE_TYPES),
+      attrs: z.record(z.string(), z.unknown()).optional(),
+      content: z.array(nodeSchema).optional(),
+      text: z.string().optional(),
+      marks: z.array(markSchema).optional(),
+    })
+    .refine((node) => node.type !== "video" || isValidVideoAttrs(node.attrs), {
+      message: "Vídeo inválido no conteúdo.",
+    }),
 );
 
 /** Documento do Tiptap restrito aos nós e marcas que o editor produz. */
