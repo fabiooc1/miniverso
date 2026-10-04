@@ -6,7 +6,7 @@ import path from "node:path";
 import { Readable } from "node:stream";
 import { IMAGE_EXTENSIONS } from "./images";
 import { createFileKey, isValidFileKey } from "./keys";
-import type { FileStorage, StoredFile } from "./types";
+import type { FileStorage, FileUpload, StoredFile } from "./types";
 
 const CONTENT_TYPES = Object.fromEntries(
   Object.entries(IMAGE_EXTENSIONS).map(([type, extension]) => [extension, type]),
@@ -19,17 +19,17 @@ const CONTENT_TYPES = Object.fromEntries(
 export class LocalFileStorage implements FileStorage {
   constructor(private readonly rootDir: string) {}
 
-  async save(file: File) {
-    const extension = IMAGE_EXTENSIONS[file.type];
+  async save(file: FileUpload) {
+    const extension = IMAGE_EXTENSIONS[file.contentType];
     if (!extension) {
-      throw new Error(`Tipo de arquivo não suportado: ${file.type}`);
+      throw new Error(`Tipo de arquivo não suportado: ${file.contentType}`);
     }
 
     const key = createFileKey(extension);
     const filePath = this.resolve(key);
 
     await mkdir(path.dirname(filePath), { recursive: true });
-    await writeFile(filePath, Buffer.from(await file.arrayBuffer()));
+    await writeFile(filePath, file.bytes);
 
     return { key };
   }
