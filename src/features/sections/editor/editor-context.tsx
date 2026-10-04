@@ -30,11 +30,14 @@ export function useEditableField(path: FieldPath) {
   if (!editor || !scope) return null;
 
   const { sectionKey, schema } = scope;
+  const prefix = `${sectionKey}.${path}`;
   return {
     sectionKey,
     schema,
     path,
-    error: editor.errors[`${sectionKey}.${path}`],
+    error: editor.errors[prefix],
+    /** Primeiro erro de um campo filho (ex.: "image.alt" dentro de uma mídia). */
+    childError: Object.entries(editor.errors).find(([key]) => key.startsWith(`${prefix}.`))?.[1],
     content: editor.getContent(sectionKey),
     update: (value: unknown) => editor.updateField(sectionKey, path, value),
     registerUpload: editor.registerUpload,
