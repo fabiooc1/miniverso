@@ -21,7 +21,9 @@ export async function savePost(id: number | null, input: unknown): Promise<Actio
 
   const parsed = postInputSchema.safeParse(input);
   if (!parsed.success) {
-    return actionError("Corrija os campos destacados.", zodFieldErrors(parsed.error.issues));
+    // Erros internos do documento (ex.: "content.content.1.attrs") aparecem no campo "content".
+    const issues = parsed.error.issues.map((issue) => ({ ...issue, path: issue.path.slice(0, 1) }));
+    return actionError("Corrija os campos destacados.", zodFieldErrors(issues));
   }
 
   const { categoryIds, content, ...fields } = parsed.data;
