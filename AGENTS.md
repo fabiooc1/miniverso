@@ -1,3 +1,7 @@
+## Contexto base do projeto
+
+Leia sempre o `CONTEXT.md` na raiz do projeto antes de planejar ou executar qualquer tarefa. Use-o como contexto base para os requisitos, o design e as decisões de arquitetura e implementação, considerando também as instruções mais recentes do usuário.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know
