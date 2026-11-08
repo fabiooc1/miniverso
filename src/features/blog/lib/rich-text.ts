@@ -67,9 +67,10 @@ export type RichTextNode = {
 };
 
 /** Atributos do bloco de vídeo, sem os `null` que o Tiptap usa como padrão. */
-function isValidVideoAttrs(attrs: Record<string, unknown> | undefined) {
+export function parseVideoAttrs(attrs: Record<string, unknown> | undefined) {
   const defined = Object.fromEntries(Object.entries(attrs ?? {}).filter(([, value]) => value != null));
-  return videoSchema.safeParse(defined).success;
+  const result = videoSchema.safeParse(defined);
+  return result.success ? result.data : null;
 }
 
 const nodeSchema: z.ZodType<RichTextNode> = z.lazy(() =>
@@ -81,7 +82,7 @@ const nodeSchema: z.ZodType<RichTextNode> = z.lazy(() =>
       text: z.string().optional(),
       marks: z.array(markSchema).optional(),
     })
-    .refine((node) => node.type !== "video" || isValidVideoAttrs(node.attrs), {
+    .refine((node) => node.type !== "video" || parseVideoAttrs(node.attrs) !== null, {
       message: "Vídeo inválido no conteúdo.",
     }),
 );

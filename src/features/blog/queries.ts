@@ -1,5 +1,6 @@
 import "server-only";
 
+import { cacheTag } from "next/cache";
 import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import type { RichTextNode } from "./lib/rich-text";
@@ -99,3 +100,59 @@ export async function listCategories() {
 }
 
 export type CategoryListItem = Awaited<ReturnType<typeof listCategories>>[number];
+
+/** Posts do blog público, do mais recente ao mais antigo (cacheados até a próxima gravação). */
+export async function listPublicPosts(categorySlug?: string) {
+  "use cache";
+  cacheTag(BLOG_CACHE_TAG);
+
+  return prisma.post.findMany({
+    where: categorySlug ? { categories: { some: { slug: categorySlug } } } : undefined,
+    orderBy: { createdAt: "desc" },
+    select: {
+      slug: true,
+      title: true,
+      coverImageKey: true,
+      coverImageAlt: true,
+      readingTime: true,
+      categories: { select: { name: true }, orderBy: { name: "asc" } },
+    },
+  });
+}
+
+export type PublicPostListItem = Awaited<ReturnType<typeof listPublicPosts>>[number];
+
+/** Categorias com pelo menos um post, para o filtro do blog público. */
+export async function listPublicCategories() {
+  "use cache";
+  cacheTag(BLOG_CACHE_TAG);
+
+  return prisma.postCategory.findMany({
+    where: { posts: { some: {} } },
+    orderBy: { name: "asc" },
+    select: { name: true, slug: true },
+  });
+}
+
+/** Artigo do blog público pela URL. */
+export async function getPublicPost(slug: string) {
+  "use cache";
+  cacheTag(BLOG_CACHE_TAG);
+
+  const post = await prisma.post.findUnique({
+    where: { slug },
+    select: {
+      title: true,
+      excerpt: true,
+      content: true,
+      coverImageKey: true,
+      coverImageAlt: true,
+      readingTime: true,
+      createdAt: true,
+      categories: { select: { name: true }, orderBy: { name: "asc" } },
+      author: { select: { name: true } },
+    },
+  });
+
+  return post && { ...post, content: post.content as RichTextNode };
+}
