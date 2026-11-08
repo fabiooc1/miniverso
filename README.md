@@ -96,4 +96,4 @@ Tipografia Inter; títulos em peso extra-bold; botões em formato pílula; rótu
 
 ## Pendências conhecidas
 
-- Páginas públicas do blog (`/blog`, `/blog/[slug]`) e envio do formulário de contato.
+- Envio do formulário de contato.
