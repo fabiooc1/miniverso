@@ -1,9 +1,15 @@
 const dateFormatter = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", year: "numeric" });
+const longDateFormatter = new Intl.DateTimeFormat("pt-BR", { dateStyle: "long", timeZone: "America/Sao_Paulo" });
 const dateTimeFormatter = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" });
 
 /** "10 de set. de 2026" */
 export function formatDate(date: Date) {
   return dateFormatter.format(date);
+}
+
+/** "10 de setembro de 2026" */
+export function formatLongDate(date: Date) {
+  return longDateFormatter.format(date);
 }
 
 export function formatDateTime(date: Date) {
