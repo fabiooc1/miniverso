@@ -62,7 +62,7 @@
  *   night   #090A14  fundo escuro principal
  *   night-2 #151625  superfícies sobre o fundo escuro
  *   violet  #6C4CFF  cor primária
- *   lime    #C8FF3D  destaque/CTA
+ *   cyan    #00B4D8  destaque/CTA
  *   lilac   #F4F3FF  fundo claro
  * O tema claro é o padrão. Seções escuras usam a classe `dark`, que troca os
  * tokens apenas dentro delas (ex.: hero, CTA, sidebar do painel).
@@ -71,7 +71,7 @@
   --brand-night: #090a14;
   --brand-night-2: #151625;
   --brand-violet: #6c4cff;
-  --brand-lime: #c8ff3d;
+  --brand-cyan: #00b4d8;
   --brand-lilac: #f4f3ff;
 
   --background: var(--brand-lilac);
@@ -88,7 +88,7 @@
   --muted-foreground: #6b6880;
   --accent: #ebe7ff;
   --accent-foreground: var(--brand-night);
-  --highlight: var(--brand-lime);
+  --highlight: var(--brand-cyan);
   --highlight-foreground: var(--brand-night);
   --success: #e5f7ed;
   --success-foreground: #1d7a47;
@@ -99,7 +99,7 @@
   --input: #e3e2eb;
   --ring: var(--brand-violet);
   --chart-1: var(--brand-violet);
-  --chart-2: var(--brand-lime);
+  --chart-2: var(--brand-cyan);
   --chart-3: #a49ec5;
   --chart-4: #4a2fd9;
   --chart-5: var(--brand-night-2);
@@ -132,7 +132,7 @@
   --destructive: #f07272;
   --border: rgb(255 255 255 / 10%);
   --input: rgb(255 255 255 / 12%);
-  --ring: var(--brand-lime);
+  --ring: var(--brand-cyan);
 }
 
 @layer base {

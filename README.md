@@ -89,7 +89,7 @@ Convenções:
 | `--brand-night` | `#090A14` | fundo escuro, sidebar do painel |
 | `--brand-night-2` | `#151625` | superfícies sobre o fundo escuro |
 | `--primary` | `#6C4CFF` | cor principal, botões, rótulos |
-| `--highlight` | `#C8FF3D` | CTAs (`<Button variant="highlight">`) |
+| `--highlight` | `#00B4D8` | CTAs (`<Button variant="highlight">`) |
 | `--background` | `#F4F3FF` | fundo claro |
 
 Tipografia Inter; títulos em peso extra-bold; botões em formato pílula; rótulos acima dos títulos com a classe `eyebrow`.

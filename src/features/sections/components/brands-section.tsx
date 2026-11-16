@@ -13,7 +13,7 @@ export function BrandsSection({ content }: { content: BrandsContent }) {
           className="text-xs font-bold uppercase"
           placeholder="Rótulo"
         />
-        <ul data-reveal="stagger" className="flex flex-wrap items-center gap-x-12 gap-y-4">
+        <ul data-reveal="stagger" className="flex flex-wrap items-center gap-x-16 gap-y-5 lg:gap-x-24">
           {content.items.map((item, index) => (
             <EditableListItem key={index} path="items" index={index} as="li">
               <EditableText
