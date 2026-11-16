@@ -11,7 +11,7 @@ type SectionHeadingProps = {
 /** Rótulo em caixa alta + título, padrão das seções da landing. */
 export function SectionHeading({ eyebrow, title, className, titleClassName }: SectionHeadingProps) {
   return (
-    <div className={cn("flex flex-col gap-5", className)}>
+    <div data-reveal="" className={cn("flex flex-col gap-5", className)}>
       <EditableText path="eyebrow" value={eyebrow} as="p" className="eyebrow" placeholder="Rótulo" />
       <EditableText
         path="title"

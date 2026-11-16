@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { ArrowUpRightIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +12,7 @@ export function ContactSection({ content }: { content: ContactContent }) {
   return (
     <section id="contato" className="dark bg-brand-night-2">
       <div className="site-container grid gap-12 py-20 md:py-24 lg:grid-cols-2">
-        <div className="flex flex-col items-start gap-6">
+        <div data-reveal="" className="flex flex-col items-start gap-6">
           <EditableText path="eyebrow" value={content.eyebrow} as="p" className="eyebrow" placeholder="Rótulo" />
           <EditableText
             path="title"
@@ -30,7 +31,12 @@ export function ContactSection({ content }: { content: ContactContent }) {
         </div>
 
         {/* O envio do formulário será implementado junto da landing pública. */}
-        <form className="flex flex-col items-start gap-3" aria-label="Formulário de contato">
+        <form
+          data-reveal=""
+          style={{ "--reveal-delay": "120ms" } as CSSProperties}
+          className="flex flex-col items-start gap-3"
+          aria-label="Formulário de contato"
+        >
           <Input name="name" placeholder="Nome e empresa" aria-label="Nome e empresa" className="h-11" />
           <Input
             name="email"

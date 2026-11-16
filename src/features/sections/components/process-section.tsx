@@ -15,7 +15,7 @@ export function ProcessSection({ content }: { content: ProcessContent }) {
           title={content.title}
           className="[&_.eyebrow]:text-highlight"
         />
-        <ol className="grid gap-4 sm:grid-cols-2 lg:grid-flow-col lg:auto-cols-fr lg:grid-cols-none">
+        <ol data-reveal="stagger" className="grid gap-4 sm:grid-cols-2 lg:grid-flow-col lg:auto-cols-fr lg:grid-cols-none">
           {content.steps.map((step, index) => (
             <EditableListItem
               key={index}

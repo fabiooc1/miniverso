@@ -9,13 +9,13 @@ export function ExperienceSection({ content }: { content: ExperienceContent }) {
   return (
     <section className="dark">
       <div className="site-container grid items-center gap-12 py-20 md:py-24 lg:grid-cols-2">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
+        <div data-reveal="scale" className="relative aspect-[4/3] overflow-hidden rounded-3xl">
           <EditableMedia path="media" value={content.media} sizes="(min-width: 1024px) 50vw, 100vw" />
         </div>
 
         <div className="flex flex-col gap-8">
           <SectionHeading eyebrow={content.eyebrow} title={content.title} />
-          <ul className="flex flex-col">
+          <ul data-reveal="stagger" className="flex flex-col">
             {content.items.map((item, index) => (
               <EditableListItem
                 key={index}

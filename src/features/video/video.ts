@@ -90,12 +90,28 @@ export function getVideoWatchUrl({ provider, videoId, hash }: ParsedVideoUrl) {
     : `https://vimeo.com/${videoId}${hash ? `/${hash}` : ""}`;
 }
 
+type EmbedOptions = {
+  autoplay?: boolean;
+  /**
+   * Reprodução automática de destaque: sem som, em loop e inline no celular,
+   * com os controles do próprio player. Navegadores só permitem autoplay sem
+   * interação quando o vídeo está mudo.
+   */
+  ambient?: boolean;
+};
+
 /** Endereço do player embutido. YouTube no modo sem cookies. */
-export function getVideoEmbedUrl({ provider, videoId, hash }: ParsedVideoUrl, { autoplay = false } = {}) {
+export function getVideoEmbedUrl({ provider, videoId, hash }: ParsedVideoUrl, { autoplay = false, ambient = false }: EmbedOptions = {}) {
+  const flags: Record<string, string> = {};
+  if (autoplay || ambient) flags.autoplay = "1";
+  if (ambient) Object.assign(flags, { loop: "1", playsinline: "1" });
+
   if (provider === "youtube") {
-    const params = new URLSearchParams({ rel: "0", ...(autoplay ? { autoplay: "1" } : {}) });
+    // O loop do YouTube só funciona com o próprio vídeo como playlist.
+    const params = new URLSearchParams({ rel: "0", ...flags, ...(ambient ? { mute: "1", playlist: videoId } : {}) });
     return `https://www.youtube-nocookie.com/embed/${videoId}?${params}`;
   }
-  const params = new URLSearchParams({ dnt: "1", ...(hash ? { h: hash } : {}), ...(autoplay ? { autoplay: "1" } : {}) });
+  const params = new URLSearchParams({ dnt: "1", ...(hash ? { h: hash } : {}), ...flags, ...(ambient ? { muted: "1" } : {}) });
   return `https://player.vimeo.com/video/${videoId}?${params}`;
 }
+

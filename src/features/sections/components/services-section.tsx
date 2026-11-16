@@ -7,7 +7,7 @@ export function ServicesSection({ content }: { content: ServicesContent }) {
   return (
     <section id="servicos" className="site-container flex flex-col gap-12 py-20 md:py-24">
       <SectionHeading eyebrow={content.eyebrow} title={content.title} />
-      <ul className="grid gap-4 md:grid-cols-3">
+      <ul data-reveal="stagger" className="grid gap-4 md:grid-cols-3">
         {content.items.map((item, index) => (
           <EditableListItem
             key={index}

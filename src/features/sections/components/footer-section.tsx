@@ -7,7 +7,7 @@ import type { FooterContent } from "../schemas/footer";
 export function FooterSection({ content }: { content: FooterContent }) {
   return (
     <footer className="bg-primary text-primary-foreground">
-      <div className="site-container flex flex-col justify-between gap-10 py-14 md:flex-row">
+      <div data-reveal="" className="site-container flex flex-col justify-between gap-10 py-14 md:flex-row">
         <div className="flex max-w-sm flex-col gap-4">
           <Logo variant="plain" />
           <EditableText

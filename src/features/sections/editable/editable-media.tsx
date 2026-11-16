@@ -16,15 +16,23 @@ type EditableMediaProps = {
   sizes: string;
   className?: string;
   priority?: boolean;
+  /** Vídeo começa sozinho, mudo e em loop (só na página pública, nunca no editor). */
+  autoplay?: boolean;
 };
 
 /** Imagem ou vídeo que preenche o contêiner pai (que deve ser `relative`). */
-export function EditableMedia({ path, value, sizes, className, priority }: EditableMediaProps) {
+export function EditableMedia({ path, value, sizes, className, priority, autoplay }: EditableMediaProps) {
   const field = useEditableField(path);
 
   const media =
     value.type === "video" ? (
-      <VideoEmbed video={value.video} sizes={sizes} className={className} priority={priority} />
+      <VideoEmbed
+        video={value.video}
+        sizes={sizes}
+        className={className}
+        priority={priority}
+        autoplay={autoplay && !field}
+      />
     ) : (
       <ImagePreview
         imageKey={value.image.key}

@@ -1,6 +1,12 @@
 "use client";
 
-import { useLayoutEffect, useRef, type ElementType, type KeyboardEvent } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  type CSSProperties,
+  type ElementType,
+  type KeyboardEvent,
+} from "react";
 import { cn } from "@/lib/utils";
 import { useEditableField, type EditableField } from "../editor/editor-context";
 import { getMaxLength } from "../lib/schema-introspection";
@@ -14,13 +20,37 @@ type EditableTextProps = {
   /** Permite quebras de linha (Enter). */
   multiline?: boolean;
   placeholder?: string;
+  /** Na página pública, anima o texto palavra por palavra (ver `.word-enter`). */
+  animateWords?: boolean;
 };
 
-export function EditableText({ as: Tag = "span", path, value, className, ...props }: EditableTextProps) {
+export function EditableText({
+  as: Tag = "span",
+  path,
+  value,
+  className,
+  animateWords,
+  ...props
+}: EditableTextProps) {
   const field = useEditableField(path);
 
   if (!field) {
-    return value ? <Tag className={className}>{value}</Tag> : null;
+    if (!value) return null;
+    if (!animateWords) return <Tag className={className}>{value}</Tag>;
+    // Espaços ficam como texto entre os spans, preservando a quebra de linha natural.
+    return (
+      <Tag className={className}>
+        {value.split(/(\s+)/).map((part, index) =>
+          /^\s+$/.test(part) || part === "" ? (
+            part
+          ) : (
+            <span key={index} className="word-enter" style={{ "--word-index": index / 2 } as CSSProperties}>
+              {part}
+            </span>
+          ),
+        )}
+      </Tag>
+    );
   }
 
   return <EditableTextInput as={Tag} field={field} value={value} className={className} {...props} />;

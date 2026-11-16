@@ -29,7 +29,7 @@ export function ProjectsSection({ content }: { content: ProjectsContent }) {
     <section id="projetos" className="dark">
       <div className="site-container flex flex-col gap-12 py-20 md:py-24">
         <SectionHeading eyebrow={content.eyebrow} title={content.title} />
-        <ul className="grid gap-x-5 gap-y-10 md:grid-cols-2">
+        <ul data-reveal="stagger" className="grid gap-x-5 gap-y-10 md:grid-cols-2">
           {content.items.map((item, index) => {
             // Com vídeo, o player fica fora do link: um botão dentro de <a> é inválido.
             const hasVideo = item.media.type === "video";
