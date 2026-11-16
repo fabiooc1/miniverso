@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import logoHorizontal from "../../../docs/identidade/logo-horizontal-branco.png";
+import logoHorizontal from "@/assets/brand/logo-horizontal-branco.png";
 
 type LogoProps = {
   className?: string;
