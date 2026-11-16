@@ -151,6 +151,13 @@
   html {
     @apply font-sans;
   }
+  /* Palavras longas em títulos grandes não podem estourar o container no celular. */
+  h1,
+  h2,
+  h3 {
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
 }
 @layer utilities {
   /* Largura e respiro lateral padrão das seções do site. */
@@ -249,6 +256,8 @@
   /* Título palavra por palavra. */
   [data-motion] .word-enter {
     display: inline-block;
+    /* Bloco por palavra: sem o limite, uma palavra longa não quebra e vaza. */
+    max-width: 100%;
     animation: enter-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
     animation-delay: calc(var(--enter-delay, 0ms) + var(--word-index, 0) * 55ms);
   }

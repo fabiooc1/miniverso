@@ -20,7 +20,7 @@ export function HeroSection({ content }: { content: HeroContent }) {
               path="title"
               value={content.title}
               as="h1"
-              className="max-w-xl text-5xl leading-[1.02] font-extrabold tracking-tight text-balance md:text-6xl"
+              className="max-w-xl text-4xl leading-[1.05] font-extrabold tracking-tight text-balance sm:text-5xl sm:leading-[1.02] md:text-6xl"
               placeholder="Título principal"
               animateWords
             />
