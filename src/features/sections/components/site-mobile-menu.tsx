@@ -2,7 +2,6 @@
 
 import { MenuIcon } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useRef, useState, type MouseEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -23,11 +22,10 @@ type SiteMobileMenuProps = {
  */
 export function SiteMobileMenu({ links, activeHref }: SiteMobileMenuProps) {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
   const pendingSection = useRef<string | null>(null);
 
   function handleLinkClick(event: MouseEvent<HTMLAnchorElement>, href: string) {
-    if (pathname === "/" && href.startsWith("/#")) {
+    if (window.location.pathname === "/" && href.startsWith("/#")) {
       event.preventDefault();
       pendingSection.current = href;
     }
@@ -39,7 +37,7 @@ export function SiteMobileMenu({ links, activeHref }: SiteMobileMenuProps) {
     if (!href) return;
     pendingSection.current = null;
     event.preventDefault();
-    scrollToSection(href, pathname);
+    scrollToSection(href);
   }
 
   return (

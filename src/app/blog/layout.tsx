@@ -8,7 +8,7 @@ export default async function BlogLayout({ children }: LayoutProps<"/blog">) {
 
   return (
     <>
-      <SiteHeader tone="light" />
+      <SiteHeader tone="light" page="blog" />
       {children}
       {footer && <SectionRenderer section={footer} />}
     </>

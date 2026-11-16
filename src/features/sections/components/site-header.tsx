@@ -2,7 +2,6 @@
 
 import { ArrowUpRightIcon } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Logo } from "@/components/brand/logo";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -22,12 +21,17 @@ const SECTION_IDS = NAV_LINKS.filter((link) => link.href.startsWith("/#")).map((
 type SiteHeaderProps = {
   /** "dark" = sobre o hero da landing; "light" = páginas de fundo claro (blog). */
   tone?: "dark" | "light";
+  /**
+   * Página em que o cabeçalho está, para destacar o link ativo. Vem por prop
+   * (e não de `usePathname`) para não bloquear o pré-render de rotas dinâmicas
+   * como `/blog/[slug]` com Cache Components.
+   */
+  page?: "landing" | "blog";
 };
 
 /** Cabeçalho do site. Não é editável: a navegação aponta para as âncoras das seções. */
-export function SiteHeader({ tone = "dark" }: SiteHeaderProps) {
-  const pathname = usePathname();
-  const activeHref = useActiveHref();
+export function SiteHeader({ tone = "dark", page = "landing" }: SiteHeaderProps) {
+  const activeHref = useActiveHref(page);
 
   return (
     <header className={cn(tone === "dark" && "dark")}>
@@ -44,7 +48,7 @@ export function SiteHeader({ tone = "dark" }: SiteHeaderProps) {
                   <Link
                     href={link.href}
                     onClick={(event) => {
-                      if (scrollToSection(link.href, pathname)) event.preventDefault();
+                      if (scrollToSection(link.href)) event.preventDefault();
                     }}
                     aria-current={active ? "location" : undefined}
                     className={cn(
@@ -63,7 +67,7 @@ export function SiteHeader({ tone = "dark" }: SiteHeaderProps) {
           <Link
             href="/#contato"
             onClick={(event) => {
-              if (scrollToSection("/#contato", pathname)) event.preventDefault();
+              if (scrollToSection("/#contato")) event.preventDefault();
             }}
             className={cn(buttonVariants({ variant: "highlight" }), "hidden md:inline-flex")}
           >
@@ -78,10 +82,9 @@ export function SiteHeader({ tone = "dark" }: SiteHeaderProps) {
 }
 
 /** Link da navegação correspondente à página ou à seção visível. */
-function useActiveHref() {
-  const pathname = usePathname();
-  const activeSection = useActiveSection(pathname === "/" ? SECTION_IDS : []);
+function useActiveHref(page: NonNullable<SiteHeaderProps["page"]>) {
+  const activeSection = useActiveSection(page === "landing" ? SECTION_IDS : []);
 
-  if (pathname.startsWith("/blog")) return "/blog";
+  if (page === "blog") return "/blog";
   return activeSection ? `/#${activeSection}` : null;
 }
